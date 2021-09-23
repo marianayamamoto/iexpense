@@ -13,6 +13,9 @@ struct AddView: View {
     @State private var name = ""
     @State private var type = "Personal"
     @State private var amount = ""
+    @State private var showingError = false
+    @State private var errorTitle = ""
+    @State private var errorMessage = ""
     
     static let types = ["Business", "Personal"]
     
@@ -36,9 +39,18 @@ struct AddView: View {
                             let item = ExpenseItem(name: self.name, type: self.type, amount: actualAmount)
                             self.expenses.items.append(item)
                             self.presentationMode.wrappedValue.dismiss()
+                        } else {
+                            showingError = true
+                            errorTitle = "Amount error"
+                            errorMessage = "Amount should be an integer. Please enter a valid value."
                         }
                     }
                 }
+            }
+            .alert(isPresented: $showingError) {
+                Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")) {
+                    self.amount = ""
+                            })
             }
         }
     }
