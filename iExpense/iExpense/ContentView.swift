@@ -12,6 +12,19 @@ struct ExpenseItem: Identifiable, Codable {
     let name: String
     let type: String
     let amount: Int
+
+    var amountStyle: Color {
+        switch amount {
+        case Int.min...10:
+            return .green
+        case 11...100:
+            return .yellow
+        case 101...Int.max:
+            return .red
+        default:
+            fatalError()
+        }
+    }
 }
 
 class Expenses: ObservableObject {
@@ -54,6 +67,7 @@ struct ContentView: View {
                         }
                         Spacer()
                         Text("$\(item.amount)")
+                            .foregroundColor(item.amountStyle)
                     }
                 }
 
